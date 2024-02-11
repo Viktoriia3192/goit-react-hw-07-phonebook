@@ -1,15 +1,14 @@
 import css from './ContactForm.module.css';
 import React, { useState } from 'react';
-import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { setContacts } from '../../redux/contacts';
+import { addContact } from '../../redux/contacts';
 
 export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.contacts);
+  const contacts = useSelector(state => state.contacts.contacts.items);
 
   const handleAddContact = userContacts => {
     if (
@@ -21,7 +20,7 @@ export const ContactForm = () => {
       alert(`${userContacts.name} is already in contacts`);
       return;
     }
-    dispatch(setContacts(userContacts));
+    dispatch(addContact(userContacts));
   };
 
   const handleInputChangeName = e => {
@@ -34,7 +33,6 @@ export const ContactForm = () => {
   const handleSubmit = e => {
     e.preventDefault();
     const userContacts = {
-      id: nanoid(),
       name,
       number,
     };
@@ -48,7 +46,7 @@ export const ContactForm = () => {
   return (
     <form className={css.form} onSubmit={handleSubmit}>
       <label>
-        Name
+        <span className={css.formLabel}>Name</span>
         <input
           type="text"
           value={name}
@@ -61,7 +59,7 @@ export const ContactForm = () => {
         />
       </label>
       <label>
-        Number
+        <span className={css.formLabel}>Number</span>
         <input
           type="tel"
           value={number}
@@ -73,7 +71,7 @@ export const ContactForm = () => {
           required
         />
       </label>
-      <button>Add contact</button>
+      <button className={css.formBtn}>Add contact</button>
     </form>
   );
 };
